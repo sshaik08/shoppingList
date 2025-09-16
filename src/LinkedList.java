@@ -177,7 +177,7 @@ public class LinkedList<T> {
         String str = "";
         if(size() > 0) {
             for(int i=1; i < size(); i++){
-                str += i + ") " + get(i)+"\n";
+                str += i + ") " + get(i) + "\n";
             }
         }
         return str;
