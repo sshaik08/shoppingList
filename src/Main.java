@@ -14,7 +14,6 @@ public class Main {
         if (choice.equals("n")) {
             System.out.print("Enter the number of items you wish to add: ");
             int numItems = input.nextInt();
-            input.nextLine();
             for (int i = 0; i <= numItems; i++) {
                 String inp = input.nextLine();
                 shoppingList.add(inp);
@@ -29,10 +28,12 @@ public class Main {
             System.out.println("Loaded list: " + "\n" + shoppingList);
         } else {
             System.out.println("invalid response");
+
+
         }
 
-        String choice2 = "";
-        while(!choice2.equals("q")) {
+        String choice2;
+        while(true) {
             System.out.print("Enter 'r' to remove an item, 'a' to add an item, or 'q' to quit: ");
             choice2 = input.nextLine();
 
@@ -41,7 +42,6 @@ public class Main {
                 System.out.print("Enter the index (begins at 1) of the item to be removed from the list: ");
                 int index = input.nextInt();
                 input.nextLine();
-
                 if (index > 0 && index <= shoppingList.size()) {
                     System.out.println(shoppingList.remove(index) + " successfully removed from list");
                 } else {
