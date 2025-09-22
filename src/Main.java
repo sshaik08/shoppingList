@@ -1,71 +1,93 @@
-
 import java.io.*;
-import java.util.Scanner;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.FileReader;
+import java.nio.file.*;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         Scanner input = new Scanner(System.in);
         LinkedList<String> shoppingList = new LinkedList<>();
 
-/*
-        System.out.print("Enter an item to add to the shopping list: ");
-        String item1 = input.nextLine();
-        Node<String> root = new Node<>(item1);
-*/
-
         File file = new File("shoppingList.txt");
+
         System.out.print("Enter 'o' to open your previous shopping list or enter 'n' to write a new one: ");
-        if (input.nextLine().equals("n")) {
+        String choice = input.nextLine();
+        if (choice.equals("n")) {
             System.out.print("Enter the number of items you wish to add: ");
             int numItems = input.nextInt();
+            input.nextLine();
             for (int i = 0; i <= numItems; i++) {
                 String inp = input.nextLine();
                 shoppingList.add(inp);
             }
-            System.out.println("siez 1: " + shoppingList.size());
             System.out.println();
-            // System.out.println(shoppingList);
-            // to write data to a file
-            FileWriter fw = new FileWriter(file);
-            String str = "Your most recent shopping list: " + "\n" + shoppingList.toString();
-            fw.write(str);
+            saveList(shoppingList);
+            System.out.println("New list saved successfully");
+            System.out.println(shoppingList);
+
+        } else if (choice.equals("o")){
+            shoppingList = loadList();
+            System.out.println("Loaded list: " + "\n" + shoppingList);
+        } else {
+            System.out.println("invalid response");
+        }
+
+        String choice2 = "";
+        while(!choice2.equals("q")) {
+            System.out.print("Enter 'r' to remove an item, 'a' to add an item, or 'q' to quit: ");
+            choice2 = input.nextLine();
+
+            if (choice2.equals("r")) {
+                System.out.println("Current list: " + "\n" + shoppingList);
+                System.out.print("Enter the index (begins at 1) of the item to be removed from the list: ");
+                int index = input.nextInt();
+                input.nextLine();
+
+                if (index > 0 && index <= shoppingList.size()) {
+                    System.out.println(shoppingList.remove(index) + " successfully removed from list");
+                } else {
+                    System.out.println("invalid index");
+                }
+
+                saveList(shoppingList);
+                System.out.println("Updated list: " + "\n" + shoppingList);
+
+            } else if (choice2.equals("a")) {
+                System.out.println("Current list: " + "\n" + shoppingList);
+                System.out.print("Enter the name of the item to be added to the list: ");
+                String item = input.nextLine();
+                shoppingList.add(item);
+                saveList(shoppingList);
+                System.out.println("Updated list: " + "\n" + shoppingList);
+            } else if (choice2.equals("q")) {
+                break;
+            } else {
+                System.out.println("invalid response");
+            }
+        }
+    }
+
+    public static void saveList(LinkedList<String> shoppingList) {
+        try {
+            FileWriter fw = new FileWriter("shoppingList.txt");
+            for (int i = 0; i < shoppingList.size(); i++) {
+                fw.write(shoppingList.get(i) + "\n");
+            }
             fw.close();
-            System.out.println("siez 2: " + shoppingList.size());
-            System.out.println("actual file content 1: " + file);
-            Scanner fileContent = new Scanner(new File("/Users/sshaik/IdeaProjects/projbasedprogramming2526/project2/shoppingList/shoppingList.txt"));
-            while (fileContent.hasNextLine())
-            {
-                System.out.println(fileContent.nextLine()+" :D");
-            }
-        } else if (input.nextLine().equals("o")){
-            System.out.println("siez 3: " + shoppingList.size());
-            FileReader fr = new FileReader(file);
-            int ch;
-            while ((ch = fr.read()) != -1) {
-                System.out.print((char) ch);
-            }
-            System.out.println("siez 4: " + shoppingList.size());
-            System.out.println("actual file content 2: " + file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+    }
 
-//        for (int i = 0; i < shoppingList.size(); i++) {
-//            System.out.println(shoppingList.get(i));
-//        }
+    public static LinkedList<String> loadList() throws IOException {
+        LinkedList<String> shoppingList = new LinkedList<>();
 
-        System.out.println("siez 5: " + shoppingList.size());
-        System.out.print("Enter 'r' to remove an item or 'a' to add an item: ");
-        if (input.nextLine().equals("r")) {
-            System.out.print("Enter the index of the item to be removed from the list: ");
-            System.out.println("The item you wish to remove is " + shoppingList.get(input.nextInt()));
-            shoppingList.remove(input.nextInt());
-            System.out.println("new shopping list: ");
-            for (int i = 0; i <= shoppingList.size(); i++) {
-                System.out.println(shoppingList.get(i));
-            }
+        FileReader fr = new FileReader("shoppingList.txt");
+        BufferedReader br = new BufferedReader(fr);
 
+        String line;
+        while((line = br.readLine()) != null) {
+            shoppingList.add(line);
         }
+        return shoppingList;
     }
 }
