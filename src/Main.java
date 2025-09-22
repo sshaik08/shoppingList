@@ -10,26 +10,14 @@ public class Main {
         File file = new File("shoppingList.txt");
 
         System.out.print("Enter 'o' to open your previous shopping list or enter 'n' to write a new one: ");
-        String choice = input.nextLine();
-        if (choice.equals("n")) {
-            System.out.print("Enter the number of items you wish to add: ");
-            int numItems = input.nextInt();
-            for (int i = 0; i <= numItems; i++) {
-                String inp = input.nextLine();
-                shoppingList.add(inp);
-            }
-            System.out.println();
-            saveList(shoppingList);
-            System.out.println("New list saved successfully");
-            System.out.println(shoppingList);
-
-        } else if (choice.equals("o")){
+        String choice1 = input.nextLine();
+        if (choice1.equals("n")) {
+            newList(input, shoppingList);
+        } else if (choice1.equals("o")){
             shoppingList = loadList();
             System.out.println("Loaded list: " + "\n" + shoppingList);
         } else {
             System.out.println("invalid response");
-
-
         }
 
         String choice2;
@@ -38,24 +26,11 @@ public class Main {
             choice2 = input.nextLine();
 
             if (choice2.equals("r")) {
-                System.out.println("Current list: " + "\n" + shoppingList);
-                System.out.print("Enter the index (begins at 1) of the item to be removed from the list: ");
-                int index = input.nextInt();
-                input.nextLine();
-                if (index > 0 && index <= shoppingList.size()) {
-                    System.out.println(shoppingList.remove(index) + " successfully removed from list");
-                } else {
-                    System.out.println("invalid index");
-                }
-
+                removeItem(input, shoppingList);
                 saveList(shoppingList);
                 System.out.println("Updated list: " + "\n" + shoppingList);
-
             } else if (choice2.equals("a")) {
-                System.out.println("Current list: " + "\n" + shoppingList);
-                System.out.print("Enter the name of the item to be added to the list: ");
-                String item = input.nextLine();
-                shoppingList.add(item);
+                addItem(input, shoppingList);
                 saveList(shoppingList);
                 System.out.println("Updated list: " + "\n" + shoppingList);
             } else if (choice2.equals("q")) {
@@ -90,4 +65,39 @@ public class Main {
         }
         return shoppingList;
     }
+
+    public static void newList(Scanner input, LinkedList<String> shoppingList) {
+        System.out.print("Enter the number of items you wish to add: ");
+        int numItems = input.nextInt();
+        for (int i = 0; i <= numItems; i++) {
+            String inp = input.nextLine();
+            shoppingList.add(inp);
+        }
+        System.out.println();
+        saveList(shoppingList);
+        System.out.println("New list saved successfully");
+        System.out.println(shoppingList);
+
+    }
+
+    public static void removeItem(Scanner input, LinkedList<String> shoppingList) {
+        System.out.println("Current list: " + "\n" + shoppingList);
+        System.out.print("Enter the index (begins at 1) of the item to be removed from the list: ");
+        int index = input.nextInt();
+        input.nextLine();
+        if (index > 0 && index <= shoppingList.size()) {
+            System.out.println(shoppingList.remove(index) + " successfully removed from list");
+        } else {
+            System.out.println("invalid index");
+        }
+    }
+
+    public static void addItem(Scanner input, LinkedList<String> shoppingList) {
+        System.out.println("Current list: " + "\n" + shoppingList);
+        System.out.print("Enter the name of the item to be added to the list: ");
+        String item = input.nextLine();
+        shoppingList.add(item);
+
+    }
 }
+
